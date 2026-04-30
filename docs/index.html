@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The sakenlang Book</title>
+    <meta name="description" content="Complete guide to the sakenlang programming language — from your first program to building web applications.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #0A84FF;
+            --accent: #5E5CE6;
+            --dark: #1C1C1E;
+            --light: #F2F2F7;
+            --white: #FFFFFF;
+            --text: #333333;
+            --muted: #888888;
+            --sidebar-w: 260px;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            line-height: 1.7;
+            background: var(--white);
+        }
+
+        /* Top Bar */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--dark);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 100;
+            gap: 16px;
+        }
+
+        .topbar-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .topbar-title {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .topbar-subtitle {
+            color: var(--muted);
+            font-size: 13px;
+            margin-left: auto;
+        }
+
+        .topbar-home {
+            color: var(--primary);
+            font-size: 13px;
+            text-decoration: none;
+            margin-left: 12px;
+        }
+
+        .topbar-home:hover { text-decoration: underline; }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            bottom: 0;
+            width: var(--sidebar-w);
+            background: var(--light);
+            overflow-y: auto;
+            padding: 24px 0;
+            border-right: 1px solid #E5E5EA;
+        }
+
+        .sidebar-section {
+            padding: 0 20px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 6px 20px;
+            font-size: 14px;
+            color: var(--text);
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: all 0.15s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(0,0,0,0.04);
+            color: var(--primary);
+        }
+
+        .sidebar a.active {
+            color: var(--primary);
+            border-left-color: var(--primary);
+            background: rgba(10,132,255,0.06);
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: var(--sidebar-w);
+            margin-top: 56px;
+            max-width: 780px;
+            padding: 48px 48px 96px;
+        }
+
+        /* Hero */
+        .doc-hero {
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid #E5E5EA;
+        }
+
+        .doc-hero h1 {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .doc-hero p {
+            font-size: 18px;
+            color: var(--muted);
+        }
+
+        /* Typography */
+        .chapter {
+            margin-bottom: 64px;
+            scroll-margin-top: 80px;
+        }
+
+        .chapter h2 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .chapter h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 32px 0 12px;
+        }
+
+        .chapter p {
+            margin-bottom: 16px;
+        }
+
+        .chapter ul, .chapter ol {
+            margin: 0 0 16px 24px;
+        }
+
+        .chapter li {
+            margin-bottom: 4px;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--dark);
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin: 16px 0;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: #F2F2F7;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        p code, li code, td code {
+            background: var(--light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: var(--accent);
+        }
+
+        .kw { color: #FF79C6; }
+        .fn { color: #8BE9FD; }
+        .str { color: #F1FA8C; }
+        .cm { color: #6272A4; }
+        .num { color: #BD93F9; }
+        .prompt { color: #30D158; }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 10px 12px;
+            background: var(--light);
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--dark);
+            border-bottom: 2px solid #E5E5EA;
+        }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--light);
+        }
+
+        /* Try It */
+        .try-it {
+            background: linear-gradient(135deg, rgba(10,132,255,0.06), rgba(94,92,230,0.06));
+            border-left: 3px solid var(--primary);
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 24px 0;
+            font-size: 14px;
+        }
+
+        .try-it strong {
+            color: var(--primary);
+        }
+
+        /* Separator */
+        hr {
+            border: none;
+            border-top: 1px solid #E5E5EA;
+            margin: 48px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.25s;
+                z-index: 90;
+                width: 280px;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 32px 20px 64px;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .doc-hero h1 { font-size: 28px; }
+            .chapter h2 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <header class="topbar">
+        <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+        <a href="../index.html" class="topbar-logo">S</a>
+        <a href="../index.html" class="topbar-title">sakenlang</a>
+        <span class="topbar-subtitle">The sakenlang Book</span>
+        <a href="../index.html" class="topbar-home">Home</a>
+    </header>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-label">Guide</div>
+        </div>
+        <a href="#welcome" class="active">1. Welcome</a>
+        <a href="#getting-started">2. Getting Started</a>
+        <a href="#basics">3. The Basics</a>
+        <a href="#control-flow">4. Control Flow</a>
+        <a href="#functions">5. Functions</a>
+        <a href="#collections">6. Collections</a>
+        <a href="#strings">7. Strings</a>
+        <a href="#web-apps">8. Web Apps</a>
+        <a href="#data">9. Working with Data</a>
+        <a href="#mvc">10. MVC Pattern</a>
+        <a href="#reference">11. Reference</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <div class="doc-hero">
+            <h1>The sakenlang Book</h1>
+            <p>A complete guide — from your first program to building web applications.</p>
+        </div>
+
+        <!-- Chapter 1 -->
+        <section class="chapter" id="welcome">
+            <h2>1. Welcome to sakenlang</h2>
+            <p>sakenlang is a modern teaching language designed for university CS courses. It has a Swift-like syntax that is clean, readable, and familiar to anyone who has seen a modern programming language.</p>
+            <p>sakenlang is different from other teaching tools. It is a real text-based language — not a visual block editor — but it strips away all the ecosystem complexity that makes languages like Python or JavaScript overwhelming for beginners. No package managers, no virtual environments, no build tools. One binary runs everything.</p>
+            <p>What makes sakenlang unique is its range. In a single language, students can learn variables, functions, and control flow — and then build web applications with a built-in HTTP server and SQLite database. Error messages are in Russian with line numbers, removing the language barrier from debugging.</p>
+            <p>sakenlang is written in Racket and compiles to a single executable binary.</p>
+        </section>
+
+        <!-- Chapter 2 -->
+        <section class="chapter" id="getting-started">
+            <h2>2. Getting Started</h2>
+
+            <h3>Download</h3>
+            <p>The <code>sakenlang</code> binary is included in the project. No installation required.</p>
+
+            <h3>Run a Program</h3>
+            <pre>./sakenlang examples/hello.sl</pre>
+
+            <h3>Interactive Mode (REPL)</h3>
+            <p>Start the REPL by running <code>sakenlang</code> with no arguments:</p>
+            <pre>./sakenlang</pre>
+            <pre><span class="prompt">sakenlang&gt;</span> <span class="fn">print</span>(<span class="str">"Привет!"</span>)
+Привет!
+<span class="prompt">sakenlang&gt;</span> <span class="kw">var</span> x = <span class="num">10</span>
+<span class="prompt">sakenlang&gt;</span> <span class="fn">print</span>(x + <span class="num">5</span>)
+15
+<span class="prompt">sakenlang&gt;</span> exit</pre>
+            <p>Type <code>exit</code> or press Ctrl+D to quit.</p>
+
+            <h3>Your First Program</h3>
+            <p>Create a file called <code>first.sl</code>:</p>
+            <pre><span class="kw">let</span> name = <span class="str">"Сакен"</span>
+<span class="kw">var</span> age = <span class="num">20</span>
+
+<span class="fn">print</span>(<span class="str">"Привет, "</span> + name + <span class="str">"!"</span>)
+<span class="fn">print</span>(age)</pre>
+            <p>Run it:</p>
+            <pre>./sakenlang first.sl</pre>
+            <p>Output:</p>
+            <pre>Привет, Сакен!
+20</pre>
+            <div class="try-it"><strong>Try it:</strong> Create a file called <code>about_me.sl</code> that prints your name, age, and favorite food.</div>
+        </section>
+
+        <!-- Chapter 3 -->
+        <section class="chapter" id="basics">
+            <h2>3. The Basics</h2>
+
+            <h3>Variables</h3>
+            <p>sakenlang has two kinds of variables:</p>
+            <ul>
+                <li><code>let</code> — creates a constant (cannot be changed)</li>
+                <li><code>var</code> — creates a mutable variable (can be changed)</li>
+            </ul>
+            <pre><span class="kw">let</span> name = <span class="str">"Арман"</span>       <span class="cm">// constant — cannot change</span>
+<span class="kw">var</span> score = <span class="num">0</span>            <span class="cm">// mutable — can change</span>
+score = score + <span class="num">10</span>       <span class="cm">// ok</span>
+<span class="cm">// name = "other"        // ERROR: cannot reassign let variable</span></pre>
+
+            <h3>Types</h3>
+            <table>
+                <thead><tr><th>Type</th><th>Example</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td>Int</td><td><code>42</code>, <code>0</code>, <code>100</code></td><td>Whole numbers</td></tr>
+                    <tr><td>String</td><td><code>"Привет"</code></td><td>Text in quotes</td></tr>
+                    <tr><td>Bool</td><td><code>true</code>, <code>false</code></td><td>Logical values</td></tr>
+                    <tr><td>Array</td><td><code>[1, 2, 3]</code></td><td>Lists of values</td></tr>
+                </tbody>
+            </table>
+            <p>Types are inferred — you do not declare them explicitly.</p>
+
+            <h3>Print</h3>
+            <pre><span class="fn">print</span>(<span class="num">42</span>)
+<span class="fn">print</span>(<span class="str">"Привет!"</span>)
+<span class="fn">print</span>(<span class="num">2</span> + <span class="num">3</span>)</pre>
+
+            <h3>Comments</h3>
+            <pre><span class="cm">// This is a comment</span>
+<span class="kw">var</span> x = <span class="num">10</span>  <span class="cm">// comment after code</span></pre>
+
+            <div class="try-it"><strong>Try it:</strong> Create variables for your university name (<code>let</code>), your current semester number (<code>var</code>), and print them both.</div>
+        </section>
+
+        <!-- Chapter 4 -->
+        <section class="chapter" id="control-flow">
+            <h2>4. Control Flow</h2>
+
+            <h3>if / else</h3>
+            <pre><span class="kw">var</span> grade = <span class="num">85</span>
+
+<span class="kw">if</span> grade &gt; <span class="num">89</span> {
+    <span class="fn">print</span>(<span class="str">"Отлично!"</span>)
+} <span class="kw">else</span> {
+    <span class="fn">print</span>(<span class="str">"Хорошо"</span>)
+}</pre>
+            <p>The <code>else</code> block is optional:</p>
+            <pre><span class="kw">var</span> is_raining = <span class="kw">true</span>
+
+<span class="kw">if</span> is_raining {
+    <span class="fn">print</span>(<span class="str">"Возьми зонт!"</span>)
+}</pre>
+
+            <h3>Nested Conditions</h3>
+            <pre><span class="kw">var</span> grade = <span class="num">75</span>
+
+<span class="kw">if</span> grade &gt; <span class="num">89</span> {
+    <span class="fn">print</span>(<span class="str">"Отлично"</span>)
+} <span class="kw">else</span> {
+    <span class="kw">if</span> grade &gt; <span class="num">74</span> {
+        <span class="fn">print</span>(<span class="str">"Хорошо"</span>)
+    } <span class="kw">else</span> {
+        <span class="fn">print</span>(<span class="str">"Удовлетворительно"</span>)
+    }
+}</pre>
+
+            <h3>Comparison Operators</h3>
+            <table>
+                <thead><tr><th>Operator</th><th>Meaning</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr><td><code>==</code></td><td>Equal</td><td><code>x == 5</code></td></tr>
+                    <tr><td><code>!=</code></td><td>Not equal</td><td><code>x != 0</code></td></tr>
+                    <tr><td><code>&lt;</code></td><td>Less than</td><td><code>x &lt; 10</code></td></tr>
+                    <tr><td><code>&gt;</code></td><td>Greater than</td><td><code>x &gt; 0</code></td></tr>
+                </tbody>
+            </table>
+
+            <h3>Logical Operators</h3>
+            <table>
+                <thead><tr><th>Operator</th><th>Meaning</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr><td><code>&&</code></td><td>AND (both true)</td><td><code>a && b</code></td></tr>
+                    <tr><td><code>||</code></td><td>OR (either true)</td><td><code>a || b</code></td></tr>
+                    <tr><td><code>!</code></td><td>NOT (invert)</td><td><code>!a</code></td></tr>
+                </tbody>
+            </table>
+            <pre><span class="kw">var</span> has_umbrella = <span class="kw">false</span>
+<span class="kw">var</span> is_raining = <span class="kw">true</span>
+
+<span class="kw">if</span> is_raining && !has_umbrella {
+    <span class="fn">print</span>(<span class="str">"Возьми зонт!"</span>)
+}</pre>
+
+            <h3>while Loops</h3>
+            <pre><span class="kw">var</span> i = <span class="num">1</span>
+<span class="kw">while</span> i &lt; <span class="num">6</span> {
+    <span class="fn">print</span>(i)
+    i = i + <span class="num">1</span>
+}</pre>
+            <p>This prints numbers 1 through 5.</p>
+
+            <h3>Common Patterns</h3>
+            <p><strong>Summing values:</strong></p>
+            <pre><span class="kw">var</span> nums = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>]
+<span class="kw">var</span> i = <span class="num">0</span>
+<span class="kw">var</span> sum = <span class="num">0</span>
+
+<span class="kw">while</span> i &lt; <span class="fn">len</span>(nums) {
+    sum = sum + nums[i]
+    i = i + <span class="num">1</span>
+}
+
+<span class="fn">print</span>(sum)    <span class="cm">// 150</span></pre>
+
+            <p><strong>Finding a maximum:</strong></p>
+            <pre><span class="kw">var</span> scores = [<span class="num">85</span>, <span class="num">92</span>, <span class="num">78</span>, <span class="num">95</span>, <span class="num">88</span>]
+<span class="kw">var</span> i = <span class="num">1</span>
+<span class="kw">var</span> best = scores[<span class="num">0</span>]
+
+<span class="kw">while</span> i &lt; <span class="fn">len</span>(scores) {
+    <span class="kw">if</span> scores[i] &gt; best {
+        best = scores[i]
+    }
+    i = i + <span class="num">1</span>
+}
+
+<span class="fn">print</span>(best)    <span class="cm">// 95</span></pre>
+
+            <div class="try-it"><strong>Try it:</strong> Write a program that prints all even numbers from 2 to 20 using a <code>while</code> loop.</div>
+        </section>
+
+        <!-- Chapter 5 -->
+        <section class="chapter" id="functions">
+            <h2>5. Functions</h2>
+
+            <h3>Declaring Functions</h3>
+            <pre><span class="kw">func</span> add(a, b) {
+    <span class="kw">return</span> a + b
+}
+
+<span class="fn">print</span>(add(<span class="num">10</span>, <span class="num">20</span>))    <span class="cm">// 30</span></pre>
+
+            <h3>Functions Without Return</h3>
+            <pre><span class="kw">func</span> greet(name) {
+    <span class="fn">print</span>(<span class="str">"Привет, "</span> + name + <span class="str">"!"</span>)
+}
+
+greet(<span class="str">"Алия"</span>)    <span class="cm">// Привет, Алия!</span></pre>
+
+            <h3>Multiple Parameters</h3>
+            <pre><span class="kw">func</span> introduce(name, age) {
+    <span class="fn">print</span>(name + <span class="str">" — "</span> + <span class="fn">to_string</span>(age) + <span class="str">" лет"</span>)
+}
+
+introduce(<span class="str">"Арман"</span>, <span class="num">21</span>)</pre>
+
+            <h3>Anonymous Functions (Closures)</h3>
+            <p>Functions can be assigned to variables:</p>
+            <pre><span class="kw">let</span> double = <span class="kw">func</span>(x) {
+    <span class="kw">return</span> x * <span class="num">2</span>
+}
+
+<span class="fn">print</span>(double(<span class="num">5</span>))     <span class="cm">// 10</span>
+<span class="fn">print</span>(double(<span class="num">17</span>))    <span class="cm">// 34</span></pre>
+
+            <h3>Functions as Values</h3>
+            <pre><span class="kw">func</span> apply(f, x) {
+    <span class="kw">return</span> f(x)
+}
+
+<span class="kw">let</span> double = <span class="kw">func</span>(n) { <span class="kw">return</span> n * <span class="num">2</span> }
+<span class="kw">let</span> negate = <span class="kw">func</span>(n) { <span class="kw">return</span> <span class="num">0</span> - n }
+
+<span class="fn">print</span>(apply(double, <span class="num">5</span>))     <span class="cm">// 10</span>
+<span class="fn">print</span>(apply(negate, <span class="num">3</span>))     <span class="cm">// -3</span></pre>
+
+            <h3>Recursion</h3>
+            <pre><span class="kw">func</span> factorial(n) {
+    <span class="kw">if</span> n &lt; <span class="num">2</span> {
+        <span class="kw">return</span> <span class="num">1</span>
+    }
+    <span class="kw">return</span> n * factorial(n - <span class="num">1</span>)
+}
+
+<span class="fn">print</span>(factorial(<span class="num">5</span>))    <span class="cm">// 120</span></pre>
+
+            <div class="try-it"><strong>Try it:</strong> Write a function <code>max(a, b)</code> that returns the larger of two numbers.</div>
+        </section>
+
+        <!-- Chapter 6 -->
+        <section class="chapter" id="collections">
+            <h2>6. Collections</h2>
+
+            <h3>Arrays</h3>
+            <pre><span class="kw">var</span> fruits = [<span class="str">"яблоко"</span>, <span class="str">"банан"</span>, <span class="str">"апельсин"</span>]
+<span class="kw">var</span> numbers = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>]</pre>
+
+            <h3>Indexing</h3>
+            <pre><span class="kw">var</span> nums = [<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>]
+<span class="fn">print</span>(nums[<span class="num">0</span>])    <span class="cm">// 10</span>
+<span class="fn">print</span>(nums[<span class="num">2</span>])    <span class="cm">// 30</span></pre>
+
+            <h3>Length</h3>
+            <pre><span class="kw">var</span> items = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+<span class="fn">print</span>(<span class="fn">len</span>(items))    <span class="cm">// 5</span></pre>
+
+            <h3>Mutation</h3>
+            <pre><span class="kw">var</span> colors = [<span class="str">"red"</span>, <span class="str">"green"</span>, <span class="str">"blue"</span>]
+colors[<span class="num">1</span>] = <span class="str">"yellow"</span>
+<span class="fn">print</span>(colors[<span class="num">1</span>])    <span class="cm">// yellow</span></pre>
+
+            <h3>Adding Elements</h3>
+            <pre><span class="kw">var</span> list = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
+<span class="fn">push</span>(list, <span class="num">4</span>)
+<span class="fn">print</span>(<span class="fn">len</span>(list))    <span class="cm">// 4</span></pre>
+
+            <h3>Iterating</h3>
+            <pre><span class="kw">var</span> scores = [<span class="num">85</span>, <span class="num">92</span>, <span class="num">78</span>, <span class="num">95</span>, <span class="num">88</span>]
+<span class="kw">var</span> i = <span class="num">0</span>
+
+<span class="kw">while</span> i &lt; <span class="fn">len</span>(scores) {
+    <span class="fn">print</span>(scores[i])
+    i = i + <span class="num">1</span>
+}</pre>
+
+            <div class="try-it"><strong>Try it:</strong> Create an array of 5 names and print each one with its index number (e.g., "1. Арман").</div>
+        </section>
+
+        <!-- Chapter 7 -->
+        <section class="chapter" id="strings">
+            <h2>7. Working with Strings</h2>
+
+            <h3>Concatenation</h3>
+            <pre><span class="kw">let</span> first = <span class="str">"Привет"</span>
+<span class="kw">let</span> second = <span class="str">"мир"</span>
+<span class="fn">print</span>(first + <span class="str">", "</span> + second + <span class="str">"!"</span>)    <span class="cm">// Привет, мир!</span></pre>
+
+            <h3>Type Conversion</h3>
+            <p>Convert numbers to strings with <code>to_string()</code>:</p>
+            <pre><span class="kw">var</span> age = <span class="num">21</span>
+<span class="fn">print</span>(<span class="str">"Мне "</span> + <span class="fn">to_string</span>(age) + <span class="str">" год"</span>)</pre>
+            <p>Convert strings to numbers with <code>to_int()</code>:</p>
+            <pre><span class="kw">var</span> input = <span class="str">"42"</span>
+<span class="kw">var</span> number = <span class="fn">to_int</span>(input)
+<span class="fn">print</span>(number + <span class="num">8</span>)    <span class="cm">// 50</span></pre>
+
+            <h3>Unicode Support</h3>
+            <p>sakenlang fully supports Unicode. Strings can contain Cyrillic, emoji, and any other characters:</p>
+            <pre><span class="kw">let</span> greeting = <span class="str">"Сәлем, әлем!"</span>
+<span class="fn">print</span>(greeting)</pre>
+
+            <div class="try-it"><strong>Try it:</strong> Write a program that builds a sentence from separate words using concatenation and <code>to_string()</code>.</div>
+        </section>
+
+        <!-- Chapter 8 -->
+        <section class="chapter" id="web-apps">
+            <h2>8. Building Web Apps</h2>
+            <p>sakenlang has a built-in HTTP server. No external libraries, no setup.</p>
+
+            <h3>Your First Web App</h3>
+            <pre><span class="fn">route</span>(<span class="str">"GET"</span>, <span class="str">"/"</span>, <span class="kw">func</span>() {
+    <span class="kw">return</span> <span class="str">"&lt;h1&gt;Привет, мир!&lt;/h1&gt;"</span>
+})
+
+<span class="fn">serve</span>(<span class="num">3000</span>)</pre>
+            <p>Run it:</p>
+            <pre>./sakenlang web.sl</pre>
+            <p>Open <code>http://localhost:3000</code> in your browser.</p>
+
+            <h3>Routes</h3>
+            <pre><span class="fn">route</span>(<span class="str">"GET"</span>, <span class="str">"/"</span>, <span class="kw">func</span>() {
+    <span class="kw">return</span> <span class="str">"&lt;h1&gt;Home&lt;/h1&gt;"</span>
+})
+
+<span class="fn">route</span>(<span class="str">"GET"</span>, <span class="str">"/about"</span>, <span class="kw">func</span>() {
+    <span class="kw">return</span> <span class="str">"&lt;h1&gt;About&lt;/h1&gt;&lt;p&gt;This is sakenlang.&lt;/p&gt;"</span>
+})
+
+<span class="fn">serve</span>(<span class="num">3000</span>)</pre>
+
+            <h3>Query Parameters</h3>
+            <pre><span class="fn">route</span>(<span class="str">"GET"</span>, <span class="str">"/hello"</span>, <span class="kw">func</span>() {
+    <span class="kw">let</span> name = <span class="fn">param</span>(<span class="str">"name"</span>)
+    <span class="kw">return</span> <span class="str">"&lt;h1&gt;Привет, "</span> + name + <span class="str">"!&lt;/h1&gt;"</span>
+})
+
+<span class="fn">serve</span>(<span class="num">3000</span>)</pre>
+            <p>Visit <code>http://localhost:3000/hello?name=Арман</code> to see "Привет, Арман!"</p>
+
+            <h3>Built-in HTTP Functions</h3>
+            <table>
+                <thead><tr><th>Function</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>route(method, path, handler)</code></td><td>Register a route</td></tr>
+                    <tr><td><code>serve(port)</code></td><td>Start the HTTP server</td></tr>
+                    <tr><td><code>param(name)</code></td><td>Get a query/body parameter</td></tr>
+                    <tr><td><code>header(name)</code></td><td>Get an HTTP header</td></tr>
+                    <tr><td><code>status(code)</code></td><td>Set response status code</td></tr>
+                </tbody>
+            </table>
+
+            <div class="try-it"><strong>Try it:</strong> Build a web app with three pages: home, about, and a greeting page that reads a name from <code>?name=</code>.</div>
+        </section>
+
+        <!-- Chapter 9 -->
+        <section class="chapter" id="data">
+            <h2>9. Working with Data</h2>
+            <p>sakenlang has built-in SQLite support for database operations.</p>
+
+            <h3>Defining a Model</h3>
+            <pre><span class="fn">model</span>(<span class="str">"student"</span>, <span class="kw">func</span>() {
+    <span class="fn">field</span>(<span class="str">"name"</span>, <span class="str">"text"</span>)
+    <span class="fn">field</span>(<span class="str">"grade"</span>, <span class="str">"integer"</span>)
+})
+
+<span class="fn">migrate</span>()</pre>
+
+            <h3>Creating Records</h3>
+            <pre><span class="fn">create</span>(<span class="str">"student"</span>, <span class="fn">record</span>(<span class="str">"name"</span>, <span class="str">"Арман"</span>, <span class="str">"grade"</span>, <span class="num">85</span>))
+<span class="fn">create</span>(<span class="str">"student"</span>, <span class="fn">record</span>(<span class="str">"name"</span>, <span class="str">"Алия"</span>, <span class="str">"grade"</span>, <span class="num">92</span>))</pre>
+
+            <h3>Querying Records</h3>
+            <pre><span class="kw">var</span> students = <span class="fn">all</span>(<span class="str">"student"</span>)
+<span class="kw">var</span> i = <span class="num">0</span>
+<span class="kw">while</span> i &lt; <span class="fn">len</span>(students) {
+    <span class="kw">let</span> s = students[i]
+    <span class="fn">print</span>(<span class="fn">get</span>(s, <span class="str">"name"</span>))
+    i = i + <span class="num">1</span>
+}</pre>
+
+            <h3>Complete Database Example</h3>
+            <pre><span class="fn">model</span>(<span class="str">"course"</span>, <span class="kw">func</span>() {
+    <span class="fn">field</span>(<span class="str">"title"</span>, <span class="str">"text"</span>)
+    <span class="fn">field</span>(<span class="str">"credits"</span>, <span class="str">"integer"</span>)
+    <span class="fn">field</span>(<span class="str">"instructor"</span>, <span class="str">"text"</span>)
+})
+
+<span class="fn">migrate</span>()
+
+<span class="fn">create</span>(<span class="str">"course"</span>, <span class="fn">record</span>(<span class="str">"title"</span>, <span class="str">"Алгоритмы"</span>, <span class="str">"credits"</span>, <span class="num">3</span>, <span class="str">"instructor"</span>, <span class="str">"Проф. Касымов"</span>))
+<span class="fn">create</span>(<span class="str">"course"</span>, <span class="fn">record</span>(<span class="str">"title"</span>, <span class="str">"Базы данных"</span>, <span class="str">"credits"</span>, <span class="num">4</span>, <span class="str">"instructor"</span>, <span class="str">"Проф. Ахметова"</span>))
+<span class="fn">create</span>(<span class="str">"course"</span>, <span class="fn">record</span>(<span class="str">"title"</span>, <span class="str">"Веб-разработка"</span>, <span class="str">"credits"</span>, <span class="num">3</span>, <span class="str">"instructor"</span>, <span class="str">"Проф. Нурланов"</span>))
+
+<span class="kw">var</span> courses = <span class="fn">all</span>(<span class="str">"course"</span>)
+<span class="kw">var</span> i = <span class="num">0</span>
+<span class="kw">while</span> i &lt; <span class="fn">len</span>(courses) {
+    <span class="kw">let</span> c = courses[i]
+    <span class="fn">print</span>(<span class="fn">get</span>(c, <span class="str">"title"</span>) + <span class="str">" — "</span> + <span class="fn">to_string</span>(<span class="fn">get</span>(c, <span class="str">"credits"</span>)) + <span class="str">" кредитов"</span>)
+    i = i + <span class="num">1</span>
+}</pre>
+
+            <h3>Database Functions</h3>
+            <table>
+                <thead><tr><th>Function</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>model(name, schema)</code></td><td>Define a database model</td></tr>
+                    <tr><td><code>field(name, type)</code></td><td>Add a field to a model</td></tr>
+                    <tr><td><code>migrate()</code></td><td>Create/update database tables</td></tr>
+                    <tr><td><code>create(model, data)</code></td><td>Insert a new record</td></tr>
+                    <tr><td><code>all(model)</code></td><td>Get all records</td></tr>
+                    <tr><td><code>find(model, id)</code></td><td>Find a record by ID</td></tr>
+                    <tr><td><code>where(model, condition)</code></td><td>Query with a condition</td></tr>
+                    <tr><td><code>update(model, id, data)</code></td><td>Update a record</td></tr>
+                    <tr><td><code>delete(model, id)</code></td><td>Delete a record</td></tr>
+                    <tr><td><code>count(model)</code></td><td>Count records</td></tr>
+                    <tr><td><code>query(sql)</code></td><td>Run raw SQL query</td></tr>
+                    <tr><td><code>run_query(sql)</code></td><td>Run raw SQL command</td></tr>
+                </tbody>
+            </table>
+
+            <div class="try-it"><strong>Try it:</strong> Create a "book" model with title and author fields, insert 3 books, and print all of them.</div>
+        </section>
+
+        <!-- Chapter 10 -->
+        <section class="chapter" id="mvc">
+            <h2>10. MVC Pattern</h2>
+            <p>For larger applications, sakenlang supports the Model-View-Controller pattern. The <code>examples/erp/</code> directory contains a complete example.</p>
+
+            <h3>Project Structure</h3>
+            <pre>erp/
+├── app.sl                 <span class="cm"># entry point</span>
+├── models/
+│   ├── product.sl         <span class="cm"># product model</span>
+│   └── order.sl           <span class="cm"># order model</span>
+├── controllers/
+│   ├── products.sl        <span class="cm"># product routes</span>
+│   └── orders.sl          <span class="cm"># order routes</span>
+└── views/
+    ├── dashboard.sl       <span class="cm"># dashboard HTML</span>
+    ├── products.sl        <span class="cm"># product list HTML</span>
+    └── orders.sl          <span class="cm"># order list HTML</span></pre>
+
+            <h3>Controllers</h3>
+            <pre><span class="fn">route</span>(<span class="str">"GET"</span>, <span class="str">"/products"</span>, <span class="kw">func</span>() {
+    <span class="kw">var</span> products = <span class="fn">all</span>(<span class="str">"product"</span>)
+    <span class="kw">return</span> <span class="fn">render</span>(<span class="str">"products"</span>, products)
+})</pre>
+
+            <h3>Running the ERP Example</h3>
+            <pre>./sakenlang examples/erp/app.sl</pre>
+            <p>Open <code>http://localhost:3000</code> to see the dashboard.</p>
+
+            <div class="try-it"><strong>Try it:</strong> Add a new model (e.g., "customer") to the ERP example with a controller and a view.</div>
+        </section>
+
+        <!-- Chapter 11 -->
+        <section class="chapter" id="reference">
+            <h2>11. Language Reference</h2>
+
+            <h3>Keywords</h3>
+            <table>
+                <thead><tr><th>Keyword</th><th>Usage</th></tr></thead>
+                <tbody>
+                    <tr><td><code>let</code></td><td>Declare a constant</td></tr>
+                    <tr><td><code>var</code></td><td>Declare a mutable variable</td></tr>
+                    <tr><td><code>if</code></td><td>Conditional branch</td></tr>
+                    <tr><td><code>else</code></td><td>Alternative branch</td></tr>
+                    <tr><td><code>while</code></td><td>Loop</td></tr>
+                    <tr><td><code>func</code></td><td>Declare a function</td></tr>
+                    <tr><td><code>return</code></td><td>Return a value from a function</td></tr>
+                    <tr><td><code>true</code></td><td>Boolean literal</td></tr>
+                    <tr><td><code>false</code></td><td>Boolean literal</td></tr>
+                    <tr><td><code>print</code></td><td>Output a value</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Operators</h3>
+            <table>
+                <thead><tr><th>Operator</th><th>Type</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>+</code></td><td>Arithmetic</td><td>Addition / string concatenation</td></tr>
+                    <tr><td><code>-</code></td><td>Arithmetic</td><td>Subtraction</td></tr>
+                    <tr><td><code>*</code></td><td>Arithmetic</td><td>Multiplication</td></tr>
+                    <tr><td><code>/</code></td><td>Arithmetic</td><td>Integer division</td></tr>
+                    <tr><td><code>==</code></td><td>Comparison</td><td>Equal</td></tr>
+                    <tr><td><code>!=</code></td><td>Comparison</td><td>Not equal</td></tr>
+                    <tr><td><code>&lt;</code></td><td>Comparison</td><td>Less than</td></tr>
+                    <tr><td><code>&gt;</code></td><td>Comparison</td><td>Greater than</td></tr>
+                    <tr><td><code>&&</code></td><td>Logical</td><td>AND</td></tr>
+                    <tr><td><code>||</code></td><td>Logical</td><td>OR</td></tr>
+                    <tr><td><code>!</code></td><td>Logical</td><td>NOT</td></tr>
+                    <tr><td><code>=</code></td><td>Assignment</td><td>Assign value</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Built-in Functions</h3>
+            <table>
+                <thead><tr><th>Function</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>print(value)</code></td><td>Output a value to the console</td></tr>
+                    <tr><td><code>len(array)</code></td><td>Get the length of an array</td></tr>
+                    <tr><td><code>push(array, value)</code></td><td>Add an element to the end</td></tr>
+                    <tr><td><code>to_string(value)</code></td><td>Convert a value to a string</td></tr>
+                    <tr><td><code>to_int(string)</code></td><td>Convert a string to an integer</td></tr>
+                    <tr><td><code>record(k, v, ...)</code></td><td>Create a key-value data record</td></tr>
+                    <tr><td><code>get(record, key)</code></td><td>Get a field from a record</td></tr>
+                    <tr><td><code>set(record, k, v)</code></td><td>Set a field in a record</td></tr>
+                    <tr><td><code>keys(record)</code></td><td>Get all keys from a record</td></tr>
+                </tbody>
+            </table>
+
+            <h3>HTTP Functions</h3>
+            <table>
+                <thead><tr><th>Function</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>route(method, path, handler)</code></td><td>Register a route</td></tr>
+                    <tr><td><code>serve(port)</code></td><td>Start the HTTP server</td></tr>
+                    <tr><td><code>param(name)</code></td><td>Get a query/body parameter</td></tr>
+                    <tr><td><code>header(name)</code></td><td>Get an HTTP header</td></tr>
+                    <tr><td><code>status(code)</code></td><td>Set response status code</td></tr>
+                    <tr><td><code>render(template, data)</code></td><td>Render a view template</td></tr>
+                    <tr><td><code>redirect(url)</code></td><td>Redirect to another URL</td></tr>
+                    <tr><td><code>page(title, body)</code></td><td>Wrap content in HTML page</td></tr>
+                    <tr><td><code>view(name, data)</code></td><td>Load a view with data</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Database Functions</h3>
+            <table>
+                <thead><tr><th>Function</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><code>model(name, schema)</code></td><td>Define a database model</td></tr>
+                    <tr><td><code>field(name, type)</code></td><td>Add a field to a model</td></tr>
+                    <tr><td><code>migrate()</code></td><td>Create/update database tables</td></tr>
+                    <tr><td><code>create(model, data)</code></td><td>Insert a new record</td></tr>
+                    <tr><td><code>all(model)</code></td><td>Get all records</td></tr>
+                    <tr><td><code>find(model, id)</code></td><td>Find a record by ID</td></tr>
+                    <tr><td><code>where(model, condition)</code></td><td>Query with a condition</td></tr>
+                    <tr><td><code>update(model, id, data)</code></td><td>Update a record</td></tr>
+                    <tr><td><code>delete(model, id)</code></td><td>Delete a record</td></tr>
+                    <tr><td><code>count(model)</code></td><td>Count records</td></tr>
+                    <tr><td><code>save(model, data)</code></td><td>Insert or update</td></tr>
+                    <tr><td><code>query(sql)</code></td><td>Run raw SQL query</td></tr>
+                    <tr><td><code>run_query(sql)</code></td><td>Run raw SQL command</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Error Messages</h3>
+            <p>Errors are reported in Russian with line numbers:</p>
+            <table>
+                <thead><tr><th>Error</th><th>Meaning</th></tr></thead>
+                <tbody>
+                    <tr><td><code>Ошибка [строка 3]: переменная 'x' не найдена</code></td><td>Variable not found</td></tr>
+                    <tr><td><code>Ошибка [строка 5]: нельзя изменить let-переменную 'name'</code></td><td>Cannot reassign constant</td></tr>
+                    <tr><td><code>Ошибка: переменная 'x' уже объявлена</code></td><td>Variable already declared</td></tr>
+                    <tr><td><code>Ошибка: деление на ноль</code></td><td>Division by zero</td></tr>
+                    <tr><td><code>Ошибка: условие if должно быть Bool</code></td><td>If condition must be Bool</td></tr>
+                    <tr><td><code>Ошибка: индекс выходит за границы массива</code></td><td>Array index out of bounds</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <script>
+        const links = document.querySelectorAll('.sidebar a');
+        const chapters = document.querySelectorAll('.chapter');
+
+        function updateActive() {
+            let current = '';
+            chapters.forEach(ch => {
+                if (ch.getBoundingClientRect().top <= 120) current = ch.id;
+            });
+            links.forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+            });
+        }
+
+        window.addEventListener('scroll', updateActive);
+
+        document.querySelector('.menu-toggle').addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.toggle('open');
+        });
+
+        links.forEach(a => {
+            a.addEventListener('click', () => {
+                document.querySelector('.sidebar').classList.remove('open');
+            });
+        });
+    </script>
+
+</body>
+</html>
