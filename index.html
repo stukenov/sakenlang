@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sakenlang — From hello world to web apps. One language.</title>
+    <meta name="description" content="A modern teaching language with Swift-like syntax, built-in HTTP server, and error messages in Russian.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #0A84FF;
+            --accent: #5E5CE6;
+            --dark: #1C1C1E;
+            --light: #F2F2F7;
+            --white: #FFFFFF;
+            --text: #333333;
+            --muted: #888888;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background: var(--white);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            padding: 80px 24px 64px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .hero-eyebrow {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 12px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .hero-tagline {
+            font-size: 20px;
+            font-weight: 400;
+            opacity: 0.9;
+            max-width: 480px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--white);
+            color: var(--primary);
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-outline {
+            border: 1.5px solid rgba(255,255,255,0.5);
+            color: var(--white);
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: border-color 0.2s;
+        }
+
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-outline:hover { border-color: var(--white); }
+
+        .section {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 64px 24px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 24px;
+            color: var(--dark);
+        }
+
+        .code-block {
+            background: var(--dark);
+            border-radius: 12px;
+            overflow: hidden;
+            max-width: 720px;
+            margin: -32px auto 0;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .code-tab {
+            background: #2C2C2E;
+            padding: 10px 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .code-body {
+            padding: 20px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #F2F2F7;
+            overflow-x: auto;
+        }
+
+        .code-body .kw { color: #FF79C6; }
+        .code-body .fn { color: #8BE9FD; }
+        .code-body .str { color: #F1FA8C; }
+        .code-body .cm { color: #6272A4; }
+
+        .features {
+            background: var(--light);
+            padding: 64px 24px;
+        }
+
+        .features-grid {
+            max-width: 720px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 24px;
+            border-radius: 12px;
+        }
+
+        .feature-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .feature-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.4;
+        }
+
+        .why p {
+            font-size: 16px;
+            color: var(--text);
+            line-height: 1.7;
+            max-width: 640px;
+        }
+
+        .quickstart {
+            background: var(--dark);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 16px;
+        }
+
+        .quickstart code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #F2F2F7;
+            line-height: 2;
+        }
+
+        .quickstart .prompt { color: #30D158; }
+        .quickstart .cm { color: #6272A4; }
+
+        .footer {
+            text-align: center;
+            padding: 32px 24px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding: 56px 20px 48px; }
+            .hero-title { font-size: 36px; }
+            .hero-tagline { font-size: 17px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .code-body { font-size: 13px; padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="hero-eyebrow">A Modern Teaching Language</div>
+        <h1 class="hero-title">sakenlang</h1>
+        <p class="hero-tagline">From hello world to web apps. One language.</p>
+        <div class="hero-buttons">
+            <a href="#quickstart" class="btn-primary">Get Started</a>
+            <a href="https://github.com/stukenov/sakenlang" class="btn-outline">GitHub</a>
+        </div>
+    </section>
+
+    <div class="code-block">
+        <div class="code-tab">hello.sl</div>
+        <div class="code-body"><span class="kw">func</span> greet(name) {
+    <span class="fn">print</span>(<span class="str">"Привет, "</span> + name + <span class="str">"!"</span>)
+}
+
+<span class="kw">let</span> message = <span class="str">"мир"</span>
+greet(message)    <span class="cm">// Привет, мир!</span></div>
+    </div>
+
+    <section class="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F4D6;</div>
+                <h3>Swift-like Syntax</h3>
+                <p>Familiar, clean syntax your students already recognize</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F310;</div>
+                <h3>Built-in HTTP</h3>
+                <p>Web server included. Route, serve, build web apps.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F5C4;&#xFE0F;</div>
+                <h3>SQLite Built-in</h3>
+                <p>Database operations with zero setup</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">&#x1F1F0;&#x1F1FF;</div>
+                <h3>Russian Errors</h3>
+                <p>Error messages in Russian with line numbers</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section why">
+        <h2 class="section-title">Why sakenlang?</h2>
+        <p>
+            sakenlang occupies the space between Scratch and Python. Unlike Scratch, it uses real
+            text-based syntax that prepares students for industry languages. Unlike Python or
+            JavaScript, it has zero ecosystem complexity — no package managers, no virtual
+            environments, no toolchain. One binary, one language, from basics to web apps
+            with a built-in HTTP server and SQLite database.
+        </p>
+    </section>
+
+    <section class="section" id="quickstart">
+        <h2 class="section-title">Quick Start</h2>
+        <div class="quickstart">
+            <code>
+                <span class="cm"># Run a program</span><br>
+                <span class="prompt">$</span> ./sakenlang examples/hello.sl<br><br>
+                <span class="cm"># Interactive REPL</span><br>
+                <span class="prompt">$</span> ./sakenlang<br><br>
+                <span class="cm"># Start a web server</span><br>
+                <span class="prompt">$</span> ./sakenlang examples/web.sl
+            </code>
+        </div>
+    </section>
+
+    <footer class="footer">
+        Made in Kazakhstan · <a href="https://github.com/stukenov/sakenlang">GitHub</a>
+    </footer>
+
+</body>
+</html>

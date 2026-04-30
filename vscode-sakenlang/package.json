@@ -1,0 +1,21 @@
+{
+  "name": "sakenlang",
+  "displayName": "sakenlang",
+  "description": "Syntax highlighting for sakenlang (.sl files)",
+  "version": "0.1.0",
+  "engines": { "vscode": "^1.75.0" },
+  "categories": ["Programming Languages"],
+  "contributes": {
+    "languages": [{
+      "id": "sakenlang",
+      "aliases": ["sakenlang", "sl"],
+      "extensions": [".sl"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "sakenlang",
+      "scopeName": "source.sakenlang",
+      "path": "./syntaxes/sakenlang.tmLanguage.json"
+    }]
+  }
+}

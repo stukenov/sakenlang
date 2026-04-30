@@ -1,0 +1,8 @@
+let a = 10
+let b = 3
+
+print(a + b)
+print(a - b)
+print(a * b)
+print(a / b)
+print((a + b) * 2)
